@@ -13,6 +13,9 @@ function App() {
   let [modal, setModal] = useState(false);
   let [title, setTitle] = useState(0);
 
+  // 입력값
+  let [txtInput, setTxtInput] = useState("");
+
   return (
     <div className="App">
       <div className="black-nav">
@@ -32,7 +35,8 @@ function App() {
             >
               {listTitle[i]}
               <span
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   let newLikeCount = [...likeCount];
                   newLikeCount[i] = newLikeCount[i] + 1;
                   setLikeCount(newLikeCount);
@@ -42,10 +46,41 @@ function App() {
               </span>
             </h3>
             <p>2월 17일 발행</p>
+            <button
+              onClick={() => {
+                let copy = [...listTitle];
+                copy.splice(i, 1);
+                setListTitle(copy);
+              }}
+            >
+              삭제
+            </button>
             <hr />
           </div>
         );
       })}
+
+      <input
+        onChange={(e) => {
+          setTxtInput(e.target.value);
+        }}
+      ></input>
+      <button
+        onClick={() => {
+          if (txtInput == "") {
+            alert("내용을 입력하세요");
+          } else {
+            let copyListTitle = [...listTitle];
+            copyListTitle.unshift(txtInput);
+            let copyLikeCount = [...likeCount];
+            copyLikeCount.unshift(0);
+            setListTitle(copyListTitle);
+            setLikeCount(copyLikeCount);
+          }
+        }}
+      >
+        업로드
+      </button>
 
       {modal == true ? <Modal listTitle={listTitle} title={title} /> : null}
     </div>
